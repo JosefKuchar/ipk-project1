@@ -1,19 +1,35 @@
 #include "tcp-client.hpp"
+#include <unistd.h>
+#include <iostream>
+#include <string>
 
 void TcpClient::run() {
-    // TODO
+    char buffer[1024] = {0};
+    int sock = 0;
+    int addrlen = sizeof(args.address);
 
-    // // Connect to the server
-    // if (connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
-    //     std::cout << "Connection failed." << std::endl;
-    //     return -1;
-    // }
+    // Create socket
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        std::cout << "Socket creation error." << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
-    // // Receive a message from the server
-    // int valread = read(sock, buffer, 1024);
-    // std::cout << buffer << std::endl;
+    // Connect to the server
+    if (connect(sock, (struct sockaddr*)&args.address, addrlen) < 0) {
+        std::cout << "Connection failed." << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
-    // // Send a message to the server
-    // send(sock, message, message_len, 0);
-    // std::cout << "Message sent to the server." << std::endl;
+    std::string line;
+    while (std::getline(std::cin, line)) {
+        // LF is required by the server
+        line += "\n";
+        // Send a message to the server
+        send(sock, line.c_str(), line.length(), 0);
+        // Receive a message from the server
+        int valread = read(sock, buffer, 1024);
+        std::cout << buffer;
+    }
+
+    close(sock);
 }
