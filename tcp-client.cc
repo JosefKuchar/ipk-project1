@@ -4,7 +4,6 @@
 #include <string>
 
 void TcpClient::run() {
-    char buffer[1024] = {0};
     int sock = 0;
     int addrlen = sizeof(args.address);
 
@@ -22,14 +21,18 @@ void TcpClient::run() {
 
     std::string line;
     while (std::getline(std::cin, line)) {
+        char buffer[1024] = {0};
         // LF is required by the server
         line += "\n";
         // Send a message to the server
         send(sock, line.c_str(), line.length(), 0);
         // Receive a message from the server
         int valread = read(sock, buffer, 1024);
-        std::cout << buffer;
+        if (valread <= 0) {
+            std::cout << "Server closed the connection." << std::endl;
+            exit(0);
+        }
+        std::cout << buffer << std::flush;
     }
-
     close(sock);
 }
