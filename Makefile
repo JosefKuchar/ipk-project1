@@ -1,4 +1,4 @@
-# Get all .c files
+# Get all .cc files
 SRCS = $(wildcard *.cc)
 # Get corresponding .o files
 OBJS := $(SRCS:%.cc=%.o)
@@ -6,7 +6,7 @@ OBJS := $(SRCS:%.cc=%.o)
 DEPS := $(SRCS:%.cc=%.d)
 
 # These will run every time (not just when the files are newer)
-.PHONY: run clean zip test pdf examples
+.PHONY: run_tcp run_udp clean zip
 
 # Main target
 ipkcpc: $(OBJS)
@@ -19,10 +19,13 @@ $(DEPS):
 include $(wildcard $(DEPS))
 
 clean:
-	rm -f *.o *.d ipkcpc
+	rm -f *.o *.d ipkcpc xkucha28.zip
 
-run: ipkcpc
+run_tcp: ipkcpc
 	./ipkcpc -h 127.0.0.1 -p 1234 -m tcp
 
 run_udp: ipkcpc
 	./ipkcpc -h 127.0.0.1 -p 1234 -m udp
+
+zip: clean
+	zip xkucha28.zip *
