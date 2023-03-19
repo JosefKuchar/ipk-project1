@@ -10,12 +10,13 @@ ADDR = '127.0.0.1'
 TCP_PORT = '1234'
 UDP_PORT = '1235'
 
+
 def run(args):
     """Run ipkcpc with supplied arguments and input"""
     pipe = subprocess.Popen(["./ipkcpc"] + args, shell=True,
-                     stdin=subprocess.PIPE,
-                     stdout=subprocess.PIPE,
-                     stderr=subprocess.PIPE)
+                            stdin=subprocess.PIPE,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
     # Wait for exit code
     out = pipe.wait()
     # Close all streams
@@ -25,8 +26,10 @@ def run(args):
     # Return exit code and output
     return out
 
+
 class TestArgumentParsing(unittest.TestCase):
     """Argument parsing tests"""
+
     def test_no_arguments(self):
         """No arguments"""
         self.assertNotEqual(run([]), 0)
@@ -37,7 +40,8 @@ class TestArgumentParsing(unittest.TestCase):
 
     def test_invalid_host(self):
         """Invalid host"""
-        self.assertNotEqual(run(['-h', 'foobar', '-p', TCP_PORT, '-m', 'tcp']), 0)
+        self.assertNotEqual(
+            run(['-h', 'foobar', '-p', TCP_PORT, '-m', 'tcp']), 0)
 
     def test_invalid_port(self):
         """Invalid port"""
@@ -54,6 +58,7 @@ class TestArgumentParsing(unittest.TestCase):
     def test_missing_port(self):
         """Missing port"""
         self.assertNotEqual(run(['-h', ADDR, '-m', 'tcp']), 0)
+
 
 if __name__ == "__main__":
     # Setup argument parser
