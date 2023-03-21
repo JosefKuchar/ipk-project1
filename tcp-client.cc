@@ -25,13 +25,13 @@ void TcpClient::run() {
 
     // Create socket
     if ((sock_tcp = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        std::cout << "Socket creation error." << std::endl;
+        std::cerr << "Socket creation error." << std::endl;
         exit(EXIT_FAILURE);
     }
 
     // Connect to the server
     if (connect(sock_tcp, (struct sockaddr*)&args.address, addrlen) < 0) {
-        std::cout << "Connection failed." << std::endl;
+        std::cerr << "Connection failed." << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -42,6 +42,7 @@ void TcpClient::run() {
     sigemptyset(&a.sa_mask);
     sigaction(SIGINT, &a, NULL);
 
+    // Read lines from stdin
     std::string line;
     while (std::getline(std::cin, line)) {
         char buffer[1024] = {0};
