@@ -14,11 +14,11 @@ enum class Status {
     Error = 1,
 };
 
-int sock = 0;
+int sock_udp = 0;
 
 // Signal handler
-void signalhandler(int signum) {
-    close(sock);
+void udp_signalhandler(int signum) {
+    close(sock_udp);
     exit(EXIT_SUCCESS);
 }
 
@@ -28,14 +28,14 @@ void UdpClient::run() {
     int addrlen = sizeof(args.address);
 
     // Create socket
-    if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    if ((sock_udp = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         std::cout << "Socket creation error." << std::endl;
         exit(EXIT_FAILURE);
     }
 
     // Register signal handler
     struct sigaction a;
-    a.sa_handler = signalhandler;
+    a.sa_handler = udp_signalhandler;
     a.sa_flags = 0;
     sigemptyset(&a.sa_mask);
     sigaction(SIGINT, &a, NULL);
@@ -53,10 +53,10 @@ void UdpClient::run() {
         buffer[1] = line.length();
         line.copy(buffer + 2, line.length());
 
-        sendto(sock, buffer, line.length() + 2, MSG_CONFIRM, (const struct sockaddr*)&args.address,
-               sizeof(args.address));
+        sendto(sock_udp, buffer, line.length() + 2, MSG_CONFIRM,
+               (const struct sockaddr*)&args.address, sizeof(args.address));
 
-        ssize_t n = recvfrom(sock, (char*)buffer, 1024, MSG_WAITALL,
+        ssize_t n = recvfrom(sock_udp, (char*)buffer, 1024, MSG_WAITALL,
                              (struct sockaddr*)&args.address, (socklen_t*)&len);
         buffer[n] = '\0';
 
@@ -72,5 +72,5 @@ void UdpClient::run() {
         }
     }
 
-    close(sock);
+    close(sock_udp);
 }
