@@ -1,3 +1,5 @@
+CPPFLAGS = -std=c++20 -O2
+
 # Get all .cc files
 SRCS = $(wildcard *.cc)
 # Get corresponding .o files
