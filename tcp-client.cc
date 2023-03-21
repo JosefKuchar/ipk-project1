@@ -1,6 +1,7 @@
 #include "tcp-client.hpp"
 #include <signal.h>
 #include <unistd.h>
+#include <cstring>
 #include <iostream>
 #include <string>
 
@@ -58,7 +59,7 @@ void TcpClient::run() {
         }
         std::cout << buffer << std::flush;
         // Check if we should exit
-        if (buffer == "BYE\n") {
+        if (strcmp(buffer, "BYE\n") == 0) {
             close(sock_tcp);
             exit(EXIT_SUCCESS);
         }
