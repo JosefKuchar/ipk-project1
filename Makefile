@@ -30,7 +30,7 @@ run_udp: ipkcpc
 	./ipkcpc -h 127.0.0.1 -p 1235 -m udp
 
 zip: clean
-	zip xkucha28.zip *
+	zip -r xkucha28.zip .
 
 test: ipkcpc
 	python3 test.py -a 127.0.0.1 -t 1234 -u 1235 -v
