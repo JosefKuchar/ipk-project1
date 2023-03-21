@@ -1,10 +1,26 @@
 #include "tcp-client.hpp"
+#include <signal.h>
 #include <unistd.h>
 #include <iostream>
 #include <string>
 
+int sock = 0;
+
+// Signal handler
+void signalhandler(int signum) {
+    char buffer[1024] = {0};
+    send(sock, "BYE\n", 4, 0);
+    int valread = read(sock, buffer, 1024);
+    if (valread <= 0) {
+        std::cerr << "Server closed the connection." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    std::cout << buffer << std::flush;
+    close(sock);
+    exit(EXIT_SUCCESS);
+}
+
 void TcpClient::run() {
-    int sock = 0;
     int addrlen = sizeof(args.address);
 
     // Create socket
@@ -19,6 +35,13 @@ void TcpClient::run() {
         exit(EXIT_FAILURE);
     }
 
+    // Register signal handler
+    struct sigaction a;
+    a.sa_handler = signalhandler;
+    a.sa_flags = 0;
+    sigemptyset(&a.sa_mask);
+    sigaction(SIGINT, &a, NULL);
+
     std::string line;
     while (std::getline(std::cin, line)) {
         char buffer[1024] = {0};
@@ -29,10 +52,17 @@ void TcpClient::run() {
         // Receive a message from the server
         int valread = read(sock, buffer, 1024);
         if (valread <= 0) {
-            std::cout << "Server closed the connection." << std::endl;
-            exit(0);
+            std::cerr << "Server closed the connection." << std::endl;
+            exit(EXIT_FAILURE);
         }
         std::cout << buffer << std::flush;
+        // Check if we should exit
+        if (buffer == "BYE\n") {
+            close(sock);
+            exit(EXIT_SUCCESS);
+        }
     }
-    close(sock);
+
+    // If we get here, it means the user didn't send a BYE, so we do it ourselves
+    signalhandler(SIGINT);
 }
