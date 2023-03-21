@@ -1,0 +1,28 @@
+python3 test.py -a 127.0.0.1 -t 1234 -u 1235 -v
+test_invalid_host (__main__.TestArgumentParsing)
+Invalid host ... ok
+test_invalid_mode (__main__.TestArgumentParsing)
+Invalid mode ... ok
+test_invalid_port (__main__.TestArgumentParsing)
+Invalid port ... ok
+test_missing_host (__main__.TestArgumentParsing)
+Missing host ... ok
+test_missing_mode (__main__.TestArgumentParsing)
+Missing mode ... ok
+test_missing_port (__main__.TestArgumentParsing)
+Missing port ... ok
+test_no_arguments (__main__.TestArgumentParsing)
+No arguments ... ok
+test_invalid_expression (__main__.TestTCP)
+Invalid expression ... ok
+test_valid_expression (__main__.TestTCP)
+Valid expression ... ok
+test_invalid_expression (__main__.TestUDP)
+Invalid expression ... ok
+test_valid_expression (__main__.TestUDP)
+Valid expression ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.009s
+
+OK
