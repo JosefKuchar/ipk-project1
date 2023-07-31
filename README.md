@@ -1,5 +1,13 @@
 # IPK Project 1: IPK Calculator Client
 
+## Hodnocení
+
+17.5 / 20
+
+> Koutensky - (-0,5) teoria - chyba. - (-0,5) navrh - chyba, resp. jedna veta. co je skoda, pretoze toto je jeden z mala projektov kde je nejaky rozumny navrh o ktorom by sa dalo pisat. - (-0,5) testovanie - koncepcne dobre, hodilo by sa ale popisat jednotlive situacie ktore boli testovane priamo v hlavnom texte. - kod - rozumny oop navrh, chvalim pouzitie abstraktnej baze.
+
+## Původní README
+
 This README is the main documentation for this project.
 
 ## Usage
